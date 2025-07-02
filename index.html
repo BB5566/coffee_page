@@ -9,228 +9,350 @@
       rel="stylesheet"
     />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Noto+Sans+TC&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Noto+Sans+TC:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <style>
-/* --- 整併與優化後的 CSS --- */
-body {
-  font-family: "Noto Sans TC", sans-serif;
-  background-color: #f7f4f1;
-}
+      :root {
+        --primary-color: #6f4e37;
+        --secondary-color: #f7f4f1;
+        --dark-color: #212529;
+        --light-text: #f8f9fa;
+        --body-text: #343a40;
+      }
 
-.navbar {
-  transition: background-color 0.3s ease-in-out;
-  background-color: transparent;
-}
+      /* --- Preloader --- */
+      .preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--secondary-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+      }
+      .preloader .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .preloader.loaded {
+        opacity: 0;
+        visibility: hidden;
+      }
 
-.navbar-scrolled {
-  background-color: rgba(18, 18, 18, 0.85) !important;
-  backdrop-filter: blur(5px); /* 增加一點毛玻璃效果，質感提升 */
-}
+      /* --- Custom Cursor --- */
+      .custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+      }
+      .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.2s ease-out;
+      }
+      .cursor-outline {
+        width: 30px;
+        height: 30px;
+        border: 1px solid white;
+        border-radius: 50%;
+        position: absolute;
+        top: -11px;
+        left: -11px;
+        transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+      }
+      .custom-cursor.grow .cursor-outline {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
 
-/* 導覽列連結 Hover 效果 */
-.navbar .nav-link {
-  transition: color 0.3s ease;
-}
+      body {
+        font-family: "Noto Sans TC", sans-serif;
+        background-color: var(--secondary-color);
+        color: var(--body-text);
+        cursor: none; /* Hide default cursor */
+      }
 
-.navbar .nav-link:hover {
-  color: #e0c5ab !important; /* 柔和的咖啡色調 */
-}
+      /* --- General & Navbar --- */
+      .navbar {
+        transition: background-color 0.4s ease-in-out;
+        background-color: transparent;
+      }
+      .navbar-scrolled {
+        background-color: rgba(18, 18, 18, 0.8) !important;
+        backdrop-filter: blur(8px);
+      }
+      .navbar-brand {
+        font-family: "Playfair Display", serif;
+      }
+      .navbar .nav-link {
+        transition: color 0.3s ease;
+      }
+      .navbar .nav-link:hover,
+      .navbar .nav-link.active {
+        color: #e0c5ab !important;
+      }
 
-/* 輪播 Hero 區塊 */
-.carousel-item {
-  height: 100vh; /* 讓 Hero 區塊佔滿整個可視高度 */
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
+      /* --- Carousel Hero --- */
+      .carousel-item {
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
 
-/* 為輪播圖片加上疊加層，讓文字更清晰 */
-.carousel-item::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-}
+      #hero .carousel-item::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1;
+      }
+      .carousel-caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 90%;
+        text-align: center;
+      }
+      .carousel-caption h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(2.8rem, 7vw, 5rem);
+        font-weight: 600;
+        color: var(--light-text);
+        text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.6);
+      }
+      .carousel-caption p {
+        color: var(--light-text);
+      }
 
-.carousel-caption {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* 確保內容絕對置中 */
-  z-index: 2; /* 確保在疊加層之上 */
-  width: 80%;
-  text-align: center;
-}
+      /* --- Section Styles --- */
+      section {
+        padding: 100px 0;
+      }
+      .section-title-wrapper {
+        overflow: hidden;
+      }
+      h2.section-title {
+        font-family: "Playfair Display", serif;
+        font-weight: 600;
+        font-size: 2.8rem;
+      }
 
-.carousel-caption h1 {
-  font-family: "Playfair Display", serif;
-  font-size: clamp(2.5rem, 6vw, 4.5rem); /* RWD 字體大小 */
-  font-weight: 700;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-}
+      /* --- Coffee Card with 3D Hover --- */
+      /* --- 新增這段來控制遮罩層 --- */
+      .coffee-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px); /* 增加一點模糊效果，更有質感 */
+        color: white;
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        pointer-events: none; /* 讓滑鼠事件可以穿透到卡片本身 */
+        z-index: 2;
+      }
 
-section {
-  padding: 80px 0;
-}
+      .coffee-card:hover .coffee-overlay {
+        opacity: 1;
+      }
 
-/* 咖啡推薦卡片 (整合原有的兩個 coffee-card img 規則) */
-.coffee-card {
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  background: white;
-}
+      /* 讓遮罩層裡的文字也加上細微動畫 */
+      .coffee-overlay h5,
+      .coffee-overlay p {
+        transform: translateY(15px);
+        opacity: 0;
+        transition: transform 0.4s 0.2s ease, opacity 0.4s 0.2s ease;
+      }
 
-.coffee-card:hover {
-  transform: translateY(-10px) scale(1.02); /* Y 軸移動比單純放大更有趣 */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-}
+      .coffee-card:hover .coffee-overlay h5,
+      .coffee-card:hover .coffee-overlay p {
+        transform: translateY(0);
+        opacity: 1;
+      }
 
-.coffee-card img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  transition: transform 0.5s ease-out;
-}
+      /* 調整圖片的 z-index 確保在遮罩層下方 */
+      .coffee-card img {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        transition: transform 0.5s ease-out;
+      }
+      /* --- 新增部分結束 --- */
+      .coffee-card {
+        transition: box-shadow 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        background: white;
+        transform-style: preserve-3d; /* Required for 3D effect */
+      }
+      .coffee-card img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        transition: transform 0.5s ease-out;
+      }
+      .coffee-card:hover img {
+        transform: scale(1.1) translateZ(20px);
+      }
+      .coffee-card .card-body {
+        padding: 1.75rem;
+      }
 
-.coffee-card:hover img {
-  transform: scale(1.15);
-}
+      /* --- About Us with Scroll Parallax --- */
+      /* --- 關於我們區塊的輪播樣式 --- */
+      #about-carousel {
+        border-radius: 15px;
+        overflow: hidden; /* 確保圖片的圓角能正確顯示 */
+      }
 
-/* 卡片疊加層的文字也加上細微動畫 */
-.coffee-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  text-align: center;
-  pointer-events: none;
-}
+      #about-carousel .carousel-item {
+        height: 450px; /* 將高度設定在 .carousel-item 上，這是輪播的單個項目 */
+        background-color: #e9e9e9; /* 加上背景色，避免圖片載入慢時出現空白 */
+      }
 
-.coffee-card:hover .coffee-overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
+      #about-carousel .carousel-item img {
+        height: 100%; /* 讓圖片填滿 .carousel-item 的高度 */
+        object-fit: cover; /* 確保圖片等比例填滿容器，不變形 */
+        width: 100%;
+      }
+      .gsap-feature i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        transition: transform 0.3s ease;
+      }
+      .gsap-feature:hover i {
+        transform: scale(1.2) rotate(-10deg);
+      }
+      #typewriter {
+        min-height: 5.5em; /* Prevent layout shift */
+        line-height: 1.8;
+      }
 
-.coffee-overlay h5,
-.coffee-overlay p {
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform 0.4s 0.2s ease, opacity 0.4s 0.2s ease;
-}
+      /* --- Contact Form with Floating Labels --- */
+      .form-floating > .form-control {
+        height: calc(3.5rem + 2px);
+        padding: 1rem 1rem;
+      }
+      .form-floating > label {
+        padding: 1rem 1rem;
+      }
+      .form-floating > .form-control:focus,
+      .form-floating > .form-control:not(:placeholder-shown) {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25);
+      }
+      .form-floating > .form-label {
+        color: #6c757d;
+      }
+      .form-floating > .form-control:focus ~ label,
+      .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        color: var(--primary-color);
+        opacity: 0.65;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+      }
 
-.coffee-card:hover .coffee-overlay h5,
-.coffee-card:hover .coffee-overlay p {
-  transform: translateY(0);
-  opacity: 1;
-}
+      /* --- Footer --- */
+      footer {
+        background-color: var(--dark-color);
+        color: var(--light-text);
+        text-align: center;
+        padding: 60px 0;
+      }
+      .footer-socials a {
+        color: var(--light-text);
+        font-size: 1.5rem;
+        margin: 0 15px;
+        transition: color 0.3s ease, transform 0.3s ease;
+      }
+      .footer-socials a:hover {
+        color: #e0c5ab;
+        transform: translateY(-3px);
+      }
 
-/* 關於我們 */
-#about h3 {
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
-
-.gsap-feature i {
-  font-size: 2.5rem;
-  color: #6f4e37;
-  margin-bottom: 0.5rem;
-  transition: transform 0.3s ease;
-}
-
-.gsap-feature:hover i {
-  transform: scale(1.2); /* 為圖示增加 hover 效果 */
-}
-
-/* 聯絡表單 */
-#contact form input,
-#contact form textarea {
-  border-radius: 5px;
-  border: 1.5px solid #ccc;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-#contact form input:focus,
-#contact form textarea:focus {
-  border-color: #6f4e37;
-  box-shadow: 0 0 8px rgba(111, 78, 55, 0.3);
-  outline: none;
-}
-
-/* 優化送出按鈕 */
-.btn-submit {
-  background-color: #6f4e37;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 50px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-submit:hover {
-  background-color: #5a3e2b;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* 返回頂部按鈕 */
-#backToTop {
-  position: fixed;
-  bottom: 40px;
-  right: 30px;
-  background-color: #6f4e37;
-  color: white;
-  border: none;
-  width: 50px; /* 設為正圓 */
-  height: 50px;
-  border-radius: 50%;
-  display: none; /* 由 GSAP 控制 */
-  cursor: pointer;
-  z-index: 99;
-  font-size: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
-}
-
-#backToTop:hover {
-  background-color: #8b6748;
-}
-
-footer {
-  background-color: #212529; /* 使用 Bootstrap 的深色系 */
-  color: white;
-  text-align: center;
-  padding: 40px 0;
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-}
+      /* --- Utility & Buttons --- */
+      .btn-brand {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.3s ease;
+      }
+      .btn-brand:hover {
+        background-color: #5a3e2b;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      }
+      #backToTop {
+        position: fixed;
+        bottom: 40px;
+        right: 30px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: none;
+        cursor: none;
+        z-index: 99;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+      #backToTop:hover {
+        background-color: #8b6748;
+        transform: scale(1.1);
+      }
     </style>
   </head>
   <body>
-    <!-- 導覽列 -->
+    <div class="preloader">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="custom-cursor">
+      <div class="cursor-dot"></div>
+      <div class="cursor-outline"></div>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
         <a class="navbar-brand fs-3 fw-bold" href="#">Brew Origin</a>
@@ -239,9 +361,6 @@ footer {
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navMenu"
-          aria-controls="navMenu"
-          aria-expanded="false"
-          aria-label="切換選單"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -264,18 +383,8 @@ footer {
       </div>
     </nav>
 
-    <!-- Hero -->
-    <!-- <header class="hero" id="hero">
-      <div class="hero-content">
-        <h1>Brew Origin</h1>
-        <p class="lead">探索每一杯咖啡的原點</p>
-        <a href="#products" class="btn btn-light btn-lg mt-4">探索更多</a>
-      </div>
-    </header> -->
-    <header>
-      <!-- Carousel -->
+    <header id="hero">
       <div id="demo" class="carousel slide" data-bs-ride="carousel">
-        <!-- Indicators/dots -->
         <div class="carousel-indicators">
           <button
             type="button"
@@ -294,48 +403,44 @@ footer {
             data-bs-slide-to="2"
           ></button>
         </div>
-
-        <!-- The slideshow/carousel -->
         <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img
-              src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=1400&q=80"
-              class="d-block"
-              style="width: 100%; height: 700px; object-fit: cover"
-            />
-            <div class="carousel-caption hero-content">
+          <div
+            class="carousel-item active"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1470337458703-46ad1756a187');
+            "
+          >
+            <div class="carousel-caption">
               <h1>Brew Origin</h1>
-              <p class="lead">探索每一杯咖啡的原點</p>
+              <p class="lead fs-5">探索每一杯咖啡的原點</p>
               <a href="#products" class="btn btn-light btn-lg mt-4">探索更多</a>
             </div>
           </div>
-          <div class="carousel-item">
-            <img
-              src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=1400&q=80"
-              class="d-block"
-              style="width: 100%"
-            />
-            <div class="carousel-caption hero-content">
-              <h1>Brew Origin</h1>
-              <p class="lead">探索每一杯咖啡的原點</p>
+          <div
+            class="carousel-item"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1525088553748-01d6e210e00b');
+            "
+          >
+            <div class="carousel-caption">
+              <h1>品味極致工藝</h1>
+              <p class="lead fs-5">從產地到您手中，每一步都用心</p>
               <a href="#products" class="btn btn-light btn-lg mt-4">探索更多</a>
             </div>
           </div>
-          <div class="carousel-item">
-            <img
-              src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=1400&q=80"
-              class="d-block"
-              style="width: 100%"
-            />
-            <div class="carousel-caption hero-content">
-              <h1>Brew Origin</h1>
-              <p class="lead">探索每一杯咖啡的原點</p>
+          <div
+            class="carousel-item"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf');
+            "
+          >
+            <div class="carousel-caption">
+              <h1>喚醒你的早晨</h1>
+              <p class="lead fs-5">一杯好咖啡，開啟美好的一天</p>
               <a href="#products" class="btn btn-light btn-lg mt-4">探索更多</a>
             </div>
           </div>
         </div>
-
-        <!-- Left and right controls/icons -->
         <button
           class="carousel-control-prev"
           type="button"
@@ -355,114 +460,183 @@ footer {
       </div>
     </header>
 
-    <!-- 咖啡推薦 -->
     <section id="products" class="container">
-      <h2 class="text-center mb-5 fw-bold">精選咖啡豆</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="coffee-card position-relative">
+      <div class="text-center mb-5">
+        <h2 class="section-title">
+          <span class="section-title-wrapper"><span>精選咖啡豆</span></span>
+        </h2>
+      </div>
+      <div class="row g-5">
+        <div class="col-lg-4 col-md-6">
+          <div class="coffee-card">
             <img
               src="https://storage.soezso.com/%E5%85%B6%E4%BB%96%E9%A0%81%E9%9D%A2%2FBlog%2Fcoffee_country_10.jpg?alt=media&token=e2c9a69f-c6ac-44aa-a259-7faf77f17c05"
               alt="肯亞 AA"
             />
             <div class="coffee-overlay">
-              <h5>莓果香</h5>
+              <h5 class="fw-bold">莓果香</h5>
               <p class="small mb-0">清新果酸 / 淺焙手沖</p>
             </div>
-            <div class="p-3">
+            <div class="card-body">
               <h5>肯亞 KENYA</h5>
               <p class="text-muted small">
-                肯亞有世界上最香、酸度鮮明的咖啡。
-                不同地區的風味有細微差別,但大多以獨特的水果、莓果類調性、柑橘酸味以及豐富多汁的口感之綜合為特色。
-              </p>
-              <p class="text-secondary small">
-                適合中淺焙，手沖 91°C 萃取最佳。
+                獨特的水果、莓果類調性，酸度鮮明，口感豐富多汁。適合中淺焙，手沖萃取最佳。
               </p>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="coffee-card position-relative">
+        <div class="col-lg-4 col-md-6">
+          <div class="coffee-card">
             <img
               src="https://storage.soezso.com/%E5%85%B6%E4%BB%96%E9%A0%81%E9%9D%A2%2FBlog%2Fcoffee_country_05.jpg?alt=media&token=36806721-e53b-477c-9164-b4c33124bbb9"
               alt="哥倫比亞"
             />
             <div class="coffee-overlay">
-              <h5>巧克力味</h5>
+              <h5 class="fw-bold">巧克力味</h5>
               <p class="small mb-0">濃郁香甜 / 中焙義式</p>
             </div>
-            <div class="p-3">
+            <div class="card-body">
               <h5>哥倫比亞 COLOMBIA</h5>
               <p class="text-muted small">
-                位於中南美洲的薩爾瓦多目前是全球第15大咖啡生產國，所產的咖啡有些全世界最風味十足的咖啡，乳脂甘甜，帶有乾果、柑橘、巧克力及焦糖調性。
+                乳脂般甘甜，帶有乾果、柑橘、巧克力及焦糖調性。建議中焙，義式或美式皆宜。
               </p>
-              <p class="text-secondary small">建議中焙，義式或美式皆宜。</p>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="coffee-card position-relative">
+        <div class="col-lg-4 col-md-6">
+          <div class="coffee-card">
             <img
               src="https://storage.soezso.com/%E5%85%B6%E4%BB%96%E9%A0%81%E9%9D%A2%2FBlog%2Fcoffee_country_02.jpg?alt=media&token=2dab541c-40f1-4477-911e-13939536718f"
-              alt="耶加雪菲"
+              alt="衣索比亞"
             />
             <div class="coffee-overlay">
-              <h5>花香調</h5>
+              <h5 class="fw-bold">花香調</h5>
               <p class="small mb-0">輕盈明亮 / 淺焙冷萃</p>
             </div>
-            <div class="p-3">
-              <h5>衣索比亞 Ethiopia</h5>
+            <div class="card-body">
+              <h5>衣索比亞 ETHIOPIA</h5>
               <p class="text-muted small">
-                位於非洲的衣索比亞是全球第5大咖啡生產國，是大家公認咖啡的起源地，原生品種與變種多樣，所出的咖啡俱有獨特風味，以及特別的優雅花香、草香與柑橘香而聞名全球。
+                公認的咖啡起源地，俱有優雅花香、草本與柑橘香，風味獨特而聞名全球。
               </p>
-              <p class="text-secondary small">建議淺焙，手沖或冷萃適合。</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 關於我們 -->
-    <section id="about" class="bg-light py-5">
+    <section id="about" class="bg-white">
       <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <h3 class="mb-4">我們的故事</h3>
-            <p id="typewriter" class="lead" style="min-height: 5.5em"></p>
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6">
+            <h2 class="section-title mb-4">
+              <span class="section-title-wrapper"><span>我們的故事</span></span>
+            </h2>
+            <p id="typewriter" class="lead"></p>
             <div class="row text-center mt-5">
               <div class="col-4 gsap-feature">
-                <i class="bi bi-geo-alt fs-2 text-dark mb-2"></i>
+                <i class="bi bi-geo-alt"></i>
                 <h6 class="fw-bold">單一產地</h6>
               </div>
               <div class="col-4 gsap-feature">
-                <i class="bi bi-hand-thumbs-up fs-2 text-dark mb-2"></i>
+                <i class="bi bi-hand-thumbs-up"></i>
                 <h6 class="fw-bold">公平貿易</h6>
               </div>
               <div class="col-4 gsap-feature">
-                <i class="bi bi-fire fs-2 text-dark mb-2"></i>
+                <i class="bi bi-fire"></i>
                 <h6 class="fw-bold">手工烘焙</h6>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <img
-              src="https://cdn.pixabay.com/photo/2019/10/31/07/14/coffee-4591159_1280.jpg"
-              alt="我們的故事"
-              class="img-fluid rounded shadow"
-            />
+          <div class="col-lg-6">
+            <div
+              id="about-carousel"
+              class="carousel slide shadow-lg"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-indicators">
+                <button
+                  type="button"
+                  data-bs-target="#about-carousel"
+                  data-bs-slide-to="0"
+                  class="active"
+                  aria-current="true"
+                  aria-label="Slide 1"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#about-carousel"
+                  data-bs-slide-to="1"
+                  aria-label="Slide 2"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#about-carousel"
+                  data-bs-slide-to="2"
+                  aria-label="Slide 3"
+                ></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img
+                    src="https://images.unsplash.com/photo-1744242541710-11136133b0bb"
+                    class="d-block w-100"
+                  />
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="https://images.unsplash.com/photo-1607681034540-2c46cc71896d"
+                    class="d-block w-100"
+                  />
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="https://images.unsplash.com/photo-1500912708295-4cf8b060f381"
+                    class="d-block w-100"
+                    alt="一杯咖啡"
+                  />
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#about-carousel"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#about-carousel"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 聯絡我們 -->
-    <section id="contact" class="container py-5">
-      <h2 class="text-center mb-4 fw-bold">聯絡我們</h2>
+    <section id="contact" class="container">
+      <div class="text-center mb-5">
+        <h2 class="section-title">
+          <span class="section-title-wrapper"><span>聯絡我們</span></span>
+        </h2>
+        <p class="lead text-muted">對我們的咖啡有任何疑問或建議？</p>
+      </div>
       <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-lg-6">
           <form>
-            <div class="mb-3">
-              <label for="name" class="form-label">姓名</label>
+            <div class="form-floating mb-3">
               <input
                 type="text"
                 id="name"
@@ -470,9 +644,9 @@ footer {
                 placeholder="請輸入您的姓名"
                 required
               />
+              <label for="name">姓名</label>
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">電子信箱</label>
+            <div class="form-floating mb-3">
               <input
                 type="email"
                 id="email"
@@ -480,182 +654,239 @@ footer {
                 placeholder="example@mail.com"
                 required
               />
+              <label for="email">電子信箱</label>
             </div>
-            <div class="mb-3">
-              <label for="message" class="form-label">留言內容</label>
+            <div class="form-floating mb-4">
               <textarea
                 id="message"
                 class="form-control"
-                rows="4"
+                rows="5"
                 placeholder="留下您的想法或問題"
+                style="height: 150px"
                 required
               ></textarea>
+              <label for="message">留言內容</label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">送出</button>
+            <div class="text-center">
+              <button type="submit" class="btn btn-brand">送出訊息</button>
+            </div>
           </form>
         </div>
       </div>
     </section>
 
-    <!-- 頁尾 -->
     <footer>
-      <p>© 2025 Brew Origin. All rights reserved.</p>
+      <div class="container">
+        <div class="footer-socials mb-4">
+          <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+        </div>
+        <p class="mb-0">© 2025 Brew Origin. All rights reserved.</p>
+      </div>
     </footer>
 
-    <!-- 回頂部按鈕 -->
-    <button id="backToTop" aria-label="回到頂部">↑</button>
+    <button id="backToTop" aria-label="回到頂部">
+      <i class="bi bi-arrow-up"></i>
+    </button>
 
-    <!-- Script -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script>// --- 整併與優化後的 JavaScript ---
-$(document).ready(function () {
-  gsap.registerPlugin(ScrollTrigger);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
 
-  // 導覽列背景變色
-  ScrollTrigger.create({
-    start: "top top-=" + $(".navbar").height(), // 當滾動超過 navbar 高度
-    onUpdate: (self) => {
-      if (self.direction === 1) {
-        // 向下滾動
-        $(".navbar").addClass("navbar-scrolled");
-      } else {
-        // 向上滾動
-        if ($(window).scrollTop() < 100) {
-          $(".navbar").removeClass("navbar-scrolled");
-        }
-      }
-    },
-  });
-
-  // 返回頂部按鈕顯示/隱藏 (GSAP 控制)
-  const backToTopBtn = $("#backToTop");
-  gsap.set(backToTopBtn, { display: "none", opacity: 0, y: 30 }); // 初始狀態
-
-  ScrollTrigger.create({
-    start: "300px top",
-    onEnter: () =>
-      gsap.to(backToTopBtn, {
-        display: "block",
-        opacity: 1,
-        y: 0,
-        duration: 0.3,
-      }),
-    onLeaveBack: () =>
-      gsap.to(backToTopBtn, {
-        opacity: 0,
-        y: 30,
-        duration: 0.3,
-        onComplete: () => gsap.set(backToTopBtn, { display: "none" }),
-      }),
-  });
-
-  // 回頂部點擊事件
-  backToTopBtn.click(function () {
-    gsap.to(window, { duration: 0.8, scrollTo: 0, ease: "power2.inOut" });
-  });
-
-  // 導覽列平滑滾動
-  $("a.nav-link").click(function (e) {
-    e.preventDefault();
-    const target = $(this).attr("href");
-    if ($(target).length) {
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: { y: target, offsetY: 70 },
-        ease: "power3.inOut",
+    <script>
+      $(window).on("load", function () {
+        // --- Preloader ---
+        gsap.to(".preloader", {
+          opacity: 0,
+          visibility: "hidden",
+          duration: 1,
+          ease: "power3.inOut",
+          onComplete: () => initPageAnimations(),
+        });
       });
-    }
-  });
 
-  // Hero 輪播文字動畫函式
-  function animateCarouselCaption(caption) {
-    const h1 = $(caption).find("h1");
-    const p = $(caption).find("p");
-    const a = $(caption).find("a");
+      function initPageAnimations() {
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-    gsap.fromTo(
-      [h1, p, a],
-      { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.2, // 讓元素依序出現
-        ease: "power3.out",
-        delay: 0.5, // 等待輪播動畫結束後再開始
+        // --- Custom Cursor ---
+        const cursorDot = $(".cursor-dot");
+        const cursorOutline = $(".cursor-outline");
+        const cursor = $(".custom-cursor");
+
+        const moveCursorX = gsap.quickTo(cursor, "x", {
+          duration: 0.4,
+          ease: "power3",
+        });
+        const moveCursorY = gsap.quickTo(cursor, "y", {
+          duration: 0.4,
+          ease: "power3",
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          moveCursorX(e.clientX);
+          moveCursorY(e.clientY);
+        });
+
+        $(
+          "a, button, .coffee-card, .carousel-control-prev, .carousel-control-next"
+        ).on("mouseenter", () => cursor.addClass("grow"));
+        $(
+          "a, button, .coffee-card, .carousel-control-prev, .carousel-control-next"
+        ).on("mouseleave", () => cursor.removeClass("grow"));
+
+        // --- Navbar Scroll Effect ---
+        ScrollTrigger.create({
+          start: "top top-=" + $(".navbar").height(),
+          onUpdate: (self) => {
+            $(".navbar").toggleClass(
+              "navbar-scrolled",
+              self.direction === 1 && $(window).scrollTop() > 100
+            );
+          },
+        });
+
+        // --- Back to Top Button ---
+        const backToTopBtn = $("#backToTop");
+        gsap.set(backToTopBtn, { display: "none", opacity: 0, y: 30 });
+        ScrollTrigger.create({
+          start: "300px top",
+          onEnter: () =>
+            gsap.to(backToTopBtn, {
+              display: "block",
+              opacity: 1,
+              y: 0,
+              duration: 0.3,
+            }),
+          onLeaveBack: () =>
+            gsap.to(backToTopBtn, {
+              opacity: 0,
+              y: 30,
+              duration: 0.3,
+              onComplete: () => gsap.set(backToTopBtn, { display: "none" }),
+            }),
+        });
+        backToTopBtn.click(() =>
+          gsap.to(window, { duration: 1.2, scrollTo: 0, ease: "power4.inOut" })
+        );
+
+        // --- Smooth Scroll for Nav Links ---
+        $("a.nav-link").click(function (e) {
+          e.preventDefault();
+          const target = $(this).attr("href");
+          if ($(target).length) {
+            gsap.to(window, {
+              duration: 1.2,
+              scrollTo: { y: target, offsetY: 70 },
+              ease: "power4.inOut",
+            });
+          }
+        });
+
+        // --- Carousel Text Animation ---
+        function animateCarouselCaption(caption) {
+          const elements = $(caption).find("h1, p, a");
+          gsap.fromTo(
+            elements,
+            { y: 40, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 1,
+              stagger: 0.2,
+              ease: "power3.out",
+              delay: 0.5,
+            }
+          );
+        }
+        const carousel = $("#demo");
+        animateCarouselCaption($(".carousel-item.active .carousel-caption"));
+        carousel.on("slide.bs.carousel", (e) =>
+          gsap.set($(e.relatedTarget).find("h1, p, a"), { opacity: 0, y: 40 })
+        );
+        carousel.on("slid.bs.carousel", (e) =>
+          animateCarouselCaption($(e.relatedTarget).find(".carousel-caption"))
+        );
+
+        // --- Animate Section Titles on Scroll ---
+        gsap.utils.toArray("h2.section-title span span").forEach((span) => {
+          gsap.from(span, {
+            yPercent: 100,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: span.closest(".section-title"),
+              start: "top 90%",
+            },
+          });
+        });
+
+        // --- Coffee Card 3D Hover Effect ---
+        $(".coffee-card").each(function () {
+          const card = this;
+          $(card).on("mousemove", function (e) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const rotateX = -gsap.utils.mapRange(0, rect.height / 2, 0, 8, y);
+            const rotateY = gsap.utils.mapRange(0, rect.width / 2, 0, 8, x);
+
+            gsap.to(card, {
+              rotationX: rotateX,
+              rotationY: rotateY,
+              transformPerspective: 1000,
+              duration: 0.5,
+              ease: "power2.out",
+            });
+          });
+
+          $(card).on("mouseleave", function () {
+            gsap.to(card, {
+              rotationX: 0,
+              rotationY: 0,
+              duration: 0.8,
+              ease: "elastic.out(1, 0.5)",
+            });
+          });
+        });
+
+        // --- "About Us" Image Parallax on Scroll ---
+
+        // --- Typewriter Effect ---
+        const typewriterEl = document.getElementById("typewriter");
+        const text =
+          "從一台老式手磨機開始，Brew Origin 相信每顆咖啡豆都有其靈魂。我們專注於單一產區、手工烘焙與公平貿易，傳遞風味背後的故事。";
+        let i = 0;
+        const speed = 40;
+        function typeWriter() {
+          if (i < text.length) {
+            typewriterEl.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+          }
+        }
+        ScrollTrigger.create({
+          trigger: "#typewriter",
+          start: "top 90%",
+          once: true,
+          onEnter: () => typeWriter(),
+        });
+
+        // --- Animate Features in "About Us" ---
+        gsap.from(".gsap-feature", {
+          scrollTrigger: {
+            trigger: "#about .row.text-center",
+            start: "top 85%",
+          },
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power2.out",
+        });
       }
-    );
-  }
-
-  const carousel = $("#demo");
-  // 立即為第一個輪播項目執行動畫
-  animateCarouselCaption($(".carousel-item.active .carousel-caption"));
-
-  // 當輪播項目開始切換時，重置下一個項目的動畫狀態
-  carousel.on("slide.bs.carousel", function (e) {
-    const nextCaption = $(e.relatedTarget).find(".carousel-caption");
-    gsap.set($(nextCaption).find("h1, p, a"), { opacity: 0, y: 30 });
-  });
-  // 當輪播項目切換完成時，執行動畫
-  carousel.on("slid.bs.carousel", function (e) {
-    animateCarouselCaption($(e.relatedTarget).find(".carousel-caption"));
-  });
-
-  // 咖啡卡片滾動動畫
-  gsap.utils.toArray(".coffee-card").forEach((card) => {
-    gsap.from(card, {
-      scrollTrigger: {
-        trigger: card,
-        start: "top 90%", // 提早一點觸發
-        toggleActions: "play none none none",
-      },
-      y: 60,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out",
-    });
-  });
-
-  // 關於我們區打字機效果 (使用 ScrollTrigger)
-  const typewriterEl = document.getElementById("typewriter");
-  const text =
-    "從一台老式手磨機開始，Brew Origin 相信每顆咖啡豆都有其靈魂。我們專注於單一產區、手工烘焙與公平貿易，傳遞風味背後的故事。";
-  let i = 0;
-  const speed = 45;
-
-  function typeWriter() {
-    if (i < text.length) {
-      typewriterEl.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typeWriter, speed);
-    }
-  }
-
-  ScrollTrigger.create({
-    trigger: "#typewriter",
-    start: "top 90%",
-    once: true, // 確保動畫只觸發一次
-    onEnter: () => {
-      typeWriter();
-    },
-  });
-
-  // 關於我們核心價值 GSAP 動畫
-  gsap.from(".gsap-feature", {
-    scrollTrigger: {
-      trigger: "#about .row.text-center", // 以父容器為觸發點
-      start: "top 85%",
-    },
-    y: 50,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.2,
-    ease: "power2.out",
-  });
-});
     </script>
   </body>
 </html>
